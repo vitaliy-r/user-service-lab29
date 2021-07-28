@@ -1,5 +1,7 @@
 package com.epam.user.service.controller;
 
+import com.epam.user.service.controller.assembler.UserAssembler;
+import com.epam.user.service.controller.model.UserModel;
 import com.epam.user.service.dto.UserDto;
 import com.epam.user.service.dto.group.OnCreate;
 import com.epam.user.service.dto.group.OnUpdate;
@@ -22,24 +24,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
+  private final UserAssembler userAssembler;
 
   @ResponseStatus(HttpStatus.OK)
   @GetMapping(value = "/users/{email}")
-  public UserDto getUser(@PathVariable String email) {
-    return userService.getUser(email);
+  public UserModel getUser(@PathVariable String email) {
+    UserDto outUserDto = userService.getUser(email);
+    return userAssembler.toModel(outUserDto);
   }
 
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping(value = "/users")
-  public UserDto createUser(@RequestBody @Validated(OnCreate.class) UserDto userDto) {
-    return userService.createUser(userDto);
+  public UserModel createUser(@RequestBody @Validated(OnCreate.class) UserDto userDto) {
+    UserDto outUserDto = userService.createUser(userDto);
+    return userAssembler.toModel(outUserDto);
   }
 
   @ResponseStatus(HttpStatus.OK)
   @PutMapping(value = "/users/{email}")
-  public UserDto updateUser(@PathVariable String email,
+  public UserModel updateUser(@PathVariable String email,
       @RequestBody @Validated(OnUpdate.class) UserDto userDto) {
-    return userService.updateUser(email, userDto);
+    UserDto outUserDto = userService.updateUser(email, userDto);
+    return userAssembler.toModel(outUserDto);
   }
 
   @DeleteMapping(value = "/users/{email}")
