@@ -1,5 +1,6 @@
 package com.epam.user.service.repository.imp;
 
+import com.epam.user.service.exception.UserNotFoundException;
 import com.epam.user.service.model.User;
 import com.epam.user.service.repository.UserRepository;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class UserRepositoryImpl implements UserRepository {
     return list.stream()
         .filter(user -> user.getEmail().equals(email))
         .findFirst()
-        .orElseThrow(() -> new RuntimeException("User is not found!"));
+        .orElseThrow(UserNotFoundException::new);
   }
 
   @Override
@@ -31,7 +32,7 @@ public class UserRepositoryImpl implements UserRepository {
     if (isDeleted) {
       list.add(user);
     } else {
-      throw new RuntimeException("User is not found!");
+      throw new UserNotFoundException();
     }
     return user;
   }
