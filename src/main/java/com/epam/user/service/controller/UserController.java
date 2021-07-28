@@ -1,5 +1,6 @@
 package com.epam.user.service.controller;
 
+import com.epam.user.service.api.UserApi;
 import com.epam.user.service.controller.assembler.UserAssembler;
 import com.epam.user.service.controller.model.UserModel;
 import com.epam.user.service.dto.UserDto;
@@ -21,35 +22,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserApi {
 
   private final UserService userService;
   private final UserAssembler userAssembler;
 
-  @ResponseStatus(HttpStatus.OK)
-  @GetMapping(value = "/users/{email}")
-  public UserModel getUser(@PathVariable String email) {
+  @Override
+  public UserModel getUser(String email) {
     UserDto outUserDto = userService.getUser(email);
     return userAssembler.toModel(outUserDto);
   }
 
-  @ResponseStatus(HttpStatus.CREATED)
-  @PostMapping(value = "/users")
-  public UserModel createUser(@RequestBody @Validated(OnCreate.class) UserDto userDto) {
+  @Override
+  public UserModel createUser(UserDto userDto) {
     UserDto outUserDto = userService.createUser(userDto);
     return userAssembler.toModel(outUserDto);
   }
 
-  @ResponseStatus(HttpStatus.OK)
-  @PutMapping(value = "/users/{email}")
-  public UserModel updateUser(@PathVariable String email,
-      @RequestBody @Validated(OnUpdate.class) UserDto userDto) {
+  @Override
+  public UserModel updateUser(String email, UserDto userDto) {
     UserDto outUserDto = userService.updateUser(email, userDto);
     return userAssembler.toModel(outUserDto);
   }
 
-  @DeleteMapping(value = "/users/{email}")
-  public ResponseEntity<Void> deleteUser(@PathVariable String email) {
+  @Override
+  public ResponseEntity<Void> deleteUser(String email) {
     userService.deleteUser(email);
     return ResponseEntity.noContent().build();
   }
