@@ -5,7 +5,7 @@ import com.epam.user.service.model.enums.ErrorType;
 public class PasswordsNotValidException extends ServiceException {
 
   private static final String DEFAULT_MESSAGE =
-      "Passwords did pass validation! Make sure they are not empty & equal.";
+      "Passwords did not pass validation! Make sure they are not empty & equal.";
 
   public PasswordsNotValidException() {
     super(DEFAULT_MESSAGE);

@@ -1,0 +1,8 @@
+spring:
+  jpa:
+    show-sql: true
+
+app:
+  user:
+    password: test_password
+    email: test_email@email.com
